@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
-	"implementasi-mvc/app/middleware"
+	"MVC-24/app/middleware"
 
-	"implementasi-mvc/app/config"
-	"implementasi-mvc/app/controller"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+
+	"MVC-24/app/config"
+	"MVC-24/app/controller"
 )
 
-func main()  {
+func main() {
 	db := config.DBInit()
 
 	accountController := controller.AccountController{DB: db}

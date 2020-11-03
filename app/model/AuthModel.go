@@ -1,14 +1,15 @@
 package model
 
 import (
+	"MVC-24/app/utils"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
-	"implementasi-mvc/app/utils"
-	"github.com/dgrijalva/jwt-go"
 )
 
 type Auth struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
@@ -16,7 +17,7 @@ type AuthModel struct {
 	DB *gorm.DB
 }
 
-func (model AuthModel) Login(auth Auth) (bool, error, string)  {
+func (model AuthModel) Login(auth Auth) (bool, error, string) {
 	var account Account
 	result := model.DB.Where(&Account{Name: auth.Name}).First(&account)
 	if result.Error != nil {
@@ -30,11 +31,11 @@ func (model AuthModel) Login(auth Auth) (bool, error, string)  {
 	err := utils.HashComparator([]byte(account.Password), []byte(auth.Password))
 
 	if err != nil {
-		return  false, errors.Errorf("incorrect password"), ""
+		return false, errors.Errorf("incorrect password"), ""
 	}
 
 	sign := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"name": auth.Name,
+		"name":            auth.Name,
 		"account_account": account.AccountNumber,
 	})
 
@@ -45,5 +46,3 @@ func (model AuthModel) Login(auth Auth) (bool, error, string)  {
 
 	return true, nil, token
 }
-
-

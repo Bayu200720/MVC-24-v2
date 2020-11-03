@@ -1,19 +1,20 @@
 package model
 
 import (
+	"MVC-24/app/utils"
 	"fmt"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
-	"implementasi-mvc/app/utils"
 )
 
 type Account struct {
-	ID int				`gorm:"primary_key" json:"-"`
-	IdAccount string	`json:"id_account,omitempty"`
-	Name string			`json:"name"`
-	Password string		`json:"password,omitempty"`
-	AccountNumber int	`json:"account_number,omitempty"`
-	Saldo int			`json:"saldo"`
+	ID            int    `gorm:"primary_key" json:"-"`
+	IdAccount     string `json:"id_account,omitempty"`
+	Name          string `json:"name"`
+	Password      string `json:"password,omitempty"`
+	AccountNumber int    `json:"account_number,omitempty"`
+	Saldo         int    `json:"saldo"`
 }
 
 type AccountModel struct {
@@ -41,10 +42,10 @@ func (model AccountModel) GetAccountDetail(idAccount int) (bool, error, []Transa
 		Find(&transaction)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			return  false, errors.Errorf("Account not found"), []Transaction{}, Account{}
+			return false, errors.Errorf("Account not found"), []Transaction{}, Account{}
 		}
 
-		return  false, result.Error, []Transaction{}, Account{}
+		return false, result.Error, []Transaction{}, Account{}
 	}
 
 	result = model.DB.Where(&Account{
@@ -52,13 +53,11 @@ func (model AccountModel) GetAccountDetail(idAccount int) (bool, error, []Transa
 	}).Find(&account)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			return  false, errors.Errorf("Account not found"), []Transaction{}, Account{}
+			return false, errors.Errorf("Account not found"), []Transaction{}, Account{}
 		}
 
-		return  false, result.Error, []Transaction{}, Account{}
+		return false, result.Error, []Transaction{}, Account{}
 	}
 
-	return  true, nil, transaction, account
+	return true, nil, transaction, account
 }
-
-
